@@ -20,10 +20,13 @@ const Navbar = () => {
               <NavLink to="#" className="hover:text-pink-400 transition">FAQ</NavLink>
               <NavLink to="#" className="hover:text-pink-400 transition">Blog</NavLink>
             </div>
+              <NavLink to='/authPage'>
             <div className="flex items-center gap-4">
               <button className="hover:text-pink-400 transition">Sign In</button>
               <Button className=" ">Sign Up</Button>
+              
             </div>
+              </NavLink>
           </nav>
         </div>
       </nav>

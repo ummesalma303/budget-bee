@@ -5,6 +5,7 @@ import './index.css'
 import { BrowserRouter, Route, Routes } from "react-router";
 import Home from './pages/Home.tsx';
 import MainLayout from './Layouts/MainLayout.tsx';
+import AuthPage from './pages/authentication/AuthPage.tsx';
 
 
 createRoot(document.getElementById('root')!).render(
@@ -12,6 +13,8 @@ createRoot(document.getElementById('root')!).render(
       <BrowserRouter>
     <Routes>
       <Route element={<MainLayout />} >
+      <Route path="/authPage" element={<AuthPage />} />
+
       <Route path="/" element={<Home />} />
       </Route>
 
