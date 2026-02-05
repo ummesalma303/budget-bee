@@ -1,102 +1,146 @@
-// import React from 'react'
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Mail, Lock, User, ArrowRight } from 'lucide-react';
 import type { AuthProps } from '@/types/home';
+import { useForm } from "react-hook-form";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
+const RegisterUserSchema = z
+  .object({
+    fullName: z.string().min(1, "Full name is required").optional(),
+    email: z
+      .string()
+      .min(1, "Please enter an email address")
+      .email("Please enter a valid email address"),
+    password: z
+      .string()
+      .min(6, "Password must be at least 6 characters"),
+    confirmPassword: z
+      .string()
+      .min(6, "Password must be at least 6 characters"),
+    terms: z.boolean().optional()
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword'],
+  });
+
+type RegisterUserSchemaType = z.infer<typeof RegisterUserSchema>;
 
 const AuthForm = ({ isSignUp, setIsSignUp }: AuthProps) => {
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm<RegisterUserSchemaType>({
+    resolver: zodResolver(RegisterUserSchema)
+  });
+
+  const onSubmit = (data: RegisterUserSchemaType) => {
+    console.log('===============')
+    console.log("SUCCESS", data);
+  };
+
   return (
-    <div className="space-y-4">
-              {/* Full Name Input - Only for Sign Up */}
-              {isSignUp && (
-                <div className="animate-fadeIn">
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Full name</label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500" />
-                    <Input 
-                      type="text" 
-                      placeholder="John Doe"
-                      className="pl-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-pink-500/20 transition-all duration-300"
-                    />
-                  </div>
-                </div>
-              )}
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-              {/* Email Input */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Email address</label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500" />
-                  <Input 
-                    type="email" 
-                    placeholder="you@example.com"
-                    className="pl-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-pink-500/20 transition-all duration-300"
-                  />
-                </div>
-              </div>
+      {/* Full Name */}
+      {isSignUp && (
+        <div>
+          <label className="block text-sm text-slate-300 mb-2">Full name</label>
+          <div className="relative">
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+            <Input
+              {...register("fullName")}
+              placeholder="John Doe"
+              className="pl-11 text-white"
+            />
+          </div>
+          {errors.fullName && (
+            <p className="text-red-400 text-sm">{errors.fullName.message}</p>
+          )}
+        </div>
+      )}
 
-              {/* Password Input */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-500" />
-                  <Input 
-                    type="password" 
-                    placeholder="••••••••"
-                    className="pl-11 bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-pink-500 focus:ring-pink-500/20 transition-all duration-300"
-                  />
-                </div>
-                {isSignUp && (
-                  <p className="text-xs text-slate-500 mt-1 animate-fadeIn">Must be at least 8 characters</p>
-                )}
-              </div>
+      {/* Email */}
+      <div>
+        <label className="block text-sm text-slate-300 mb-2">Email</label>
+        <div className="relative">
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+          <Input
+            {...register("email")}
+            type="email"
+            placeholder="you@example.com"
+            className="pl-11 text-white"
+          />
+        </div>
+        {errors.email && (
+          <p className="text-red-400 text-sm">{errors.email.message}</p>
+        )}
+      </div>
 
-              {/* Remember Me / Terms */}
-              {!isSignUp ? (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox id="remember" className="border-slate-700 data-[state=checked]:bg-pink-500 data-[state=checked]:border-pink-500" />
-                    <label htmlFor="remember" className="text-sm text-slate-400 cursor-pointer">
-                      Remember me
-                    </label>
-                  </div>
-                  <a href="#" className="text-sm text-pink-400 hover:text-pink-300 transition">
-                    Forgot password?
-                  </a>
-                </div>
-              ) : (
-                <div className="flex items-start space-x-2 pt-2 animate-fadeIn">
-                  <Checkbox id="terms" className="mt-1 border-slate-700 data-[state=checked]:bg-pink-500 data-[state=checked]:border-pink-500" />
-                  <label htmlFor="terms" className="text-sm text-slate-400 cursor-pointer leading-relaxed">
-                    I agree to the{' '}
-                    <a href="#" className="text-pink-400 hover:text-pink-300">Terms of Service</a>
-                    {' '}and{' '}
-                    <a href="#" className="text-pink-400 hover:text-pink-300">Privacy Policy</a>
-                  </label>
-                </div>
-              )}
+      {/* Password */}
+      <div>
+        <label className="block text-sm text-slate-300 mb-2">Password</label>
+        <div className="relative">
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+          <Input
+            {...register("password")}
+            type="password"
+            placeholder="••••••••"
+            className="pl-11 text-white"
+          />
+        </div>
+        {errors.password && (
+          <p className="text-red-400 text-sm">{errors.password.message}</p>
+        )}
+      </div>
+      {/* confirm password */}
+<div>
+          <label className="block text-sm mb-2 text-slate-300">Confirm Password</label>
+          <Input
+            {...register("confirmPassword")}
+            type="password "
+            className='text-white'
+          />
+          {errors.confirmPassword && (
+            <p className="text-red-400 text-sm">{errors.confirmPassword.message}</p>
+          )}
+        </div>
 
-              {/* Submit Button */}
-              <Button className="w-full bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 hover:from-pink-600 hover:via-purple-600 hover:to-blue-600 text-white font-semibold py-6 rounded-lg transition-all duration-300 shadow-lg shadow-pink-500/50 hover:shadow-pink-500/70 hover:scale-[1.02] group">
-                {isSignUp ? 'Create account' : 'Sign in'}
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+      {/* Terms */}
+      {isSignUp && (
+        <div className="flex items-center gap-2">
+          <Checkbox {...register("terms")} />
+          <label className="text-sm text-slate-400">
+            Accept Terms
+          </label>
+        </div>
+      )}
 
-              {/* Toggle Link */}
-              <p className="text-center text-slate-400 pt-2">
-                {isSignUp ? 'Already have an account?' : "Don't have an account?"}{' '}
-                <button 
-                  onClick={() => setIsSignUp(!isSignUp)}
-                  className="text-pink-400 hover:text-pink-300 font-semibold transition"
-                >
-                  {isSignUp ? 'Sign in' : 'Sign up'}
-                </button>
-              </p>
-            </div>
-  )
-}
+      {/* Submit */}
+      <Button type="submit" className="w-full">
+        {isSignUp ? "Create account" : "Sign in"}
+        <ArrowRight className="ml-2 w-5 h-5" />
+      </Button>
 
-export default AuthForm
+      {/* Toggle */}
+      <p className="text-center text-slate-400 pt-2">
+        {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+        <button
+          type="button"
+          onClick={() => setIsSignUp(!isSignUp)}
+          className="text-pink-400 ml-2"
+        >
+          {isSignUp ? 'Sign in' : 'Sign up'}
+        </button>
+      </p>
+
+    </form>
+  );
+};
+
+export default AuthForm;
