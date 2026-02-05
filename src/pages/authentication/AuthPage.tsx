@@ -92,10 +92,6 @@ export default function AuthPage() {
           </div>
         </Card>
 
-        {/* Footer */}
-        <div className="text-center mt-8 text-slate-500 text-sm">
-          <p>© 2024 Analytics. All rights reserved.</p>
-        </div>
       </div>
     </div>
   );

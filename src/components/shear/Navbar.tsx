@@ -15,6 +15,7 @@ const Navbar = () => {
               <span className="text-xl font-bold">ANALYTICS</span>
             </div>
             <div className="hidden md:flex items-center gap-8">
+              <NavLink to="/" className="hover:text-pink-400 transition">Home</NavLink>
               <NavLink to="#" className="hover:text-pink-400 transition">Features</NavLink>
               <NavLink to="#" className="hover:text-pink-400 transition">Pricing</NavLink>
               <NavLink to="#" className="hover:text-pink-400 transition">FAQ</NavLink>
