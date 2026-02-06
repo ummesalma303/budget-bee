@@ -16,10 +16,10 @@ const Navbar = () => {
             </div>
             <div className="hidden md:flex items-center gap-8">
               <NavLink to="/" className="hover:text-pink-400 transition">Home</NavLink>
-              <NavLink to="#" className="hover:text-pink-400 transition">Features</NavLink>
               <NavLink to="#" className="hover:text-pink-400 transition">Pricing</NavLink>
               <NavLink to="#" className="hover:text-pink-400 transition">FAQ</NavLink>
               <NavLink to="#" className="hover:text-pink-400 transition">Blog</NavLink>
+              <NavLink to="/dashBoard" className="hover:text-pink-400 transition">Dashboard</NavLink>
             </div>
               <NavLink to='/authPage'>
             <div className="flex items-center gap-4">

@@ -18,7 +18,7 @@ export default function AuthPage() {
 
       {/* Noise Texture Overlay */}
       <div
-  className="absolute inset-0 opacity-[0.12] bg-cover bg-center"
+  className="absolute inset-0 opacity-[0.8] bg-cover bg-center"
   style={{
     backgroundImage: "url('https://static.vecteezy.com/system/resources/previews/006/940/997/non_2x/abstract-colorful-geometric-shapes-seamless-pattern-on-white-background-vector.jpg')"
   }}

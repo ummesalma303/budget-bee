@@ -8,6 +8,7 @@ import MainLayout from './Layouts/MainLayout.tsx';
 import AuthPage from './pages/authentication/AuthPage.tsx';
 import { Provider } from 'react-redux'
 import { store } from './redux/store/store.ts';
+import DashboardLayout from './Layouts/DashboardLayout.tsx';
 
 
 createRoot(document.getElementById('root')!).render(
@@ -19,7 +20,13 @@ createRoot(document.getElementById('root')!).render(
       <Route path="/authPage" element={<AuthPage />} />
 
       <Route path="/" element={<Home />} />
+
       </Route>
+      <Route path='/dashboard' element={<DashboardLayout />} >
+      <Route path="authPage" element={<AuthPage />} />
+
+      </Route>
+      
 
     </Routes>
 
